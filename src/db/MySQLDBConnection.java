@@ -273,8 +273,24 @@ public class MySQLDBConnection implements DBConnection {
 
 	@Override
 	public Boolean verifyLogin(String userId, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			if (conn == null) {
+				return false;
+			}
+
+			String sql = "SELECT user_id from users WHERE user_id=? and password=?";
+			PreparedStatement pstmt = conn.prepareStatement( sql );
+			pstmt.setString( 1, userId); 
+			pstmt.setString( 2, password); 
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+
 	}
 
 	@Override
